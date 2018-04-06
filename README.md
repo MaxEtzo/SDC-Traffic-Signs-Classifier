@@ -4,11 +4,12 @@ This project is MaxEtzo's submission for **Traffic Sign Classifier** aassignment
 
 [//]: # (Image References)
 [model]: ./resources/etzonet.png "Etzonet model diagram"
-[hist_orig]: ./resources/histogram_original.png "Datasets distribution histograms"
-[signs0-15]: ./resources/classes0-15.png "Random samples for sign classes 0 - 15"
-[signs16-31]: ./resources/classes16-31.png "Random samples for sign classes 16 - 31"
-[signs32-42]: ./resources/classes32-42.png "Random samples for sign classes 32 - 42"
+[hist_orig]: ./resources/hist_orig.png) "Datasets distribution histograms"
+[signs0-15]: ./resources/classes0-15.png =507x47"Random samples for sign classes 0 - 15"
+[signs16-31]: ./resources/classes16-31.png =507x47"Random samples for sign classes 16 - 31"
+[signs32-42]: ./resources/classes32-42.png =356x47"Random samples for sign classes 32 - 42"
 [sign12_sym]: ./resources/class12_sym.png "Examples of symmetry transformations on 'Priority road' sign"
+[sign38-39_sym]: ./resources/class38-39_sym.png "Example of horizontally mirrored copies 'Keep Right' -> 'Keep Left'"
 
 **Build a Traffic Sign Recognition Project**
 The goals of this project are the following:
@@ -27,7 +28,7 @@ The goals of this project are the following:
 
 #### 1. Basic summary of the dataset:
 
-I used python's native `len` and numpy's `shape` methods to obtain the information on the datasets and the format.
+I used python's native `len` and numpy's `shape` methods to obtain the information on the datasets and the image format.
 ```python
 n_train = len(y_train)
 n_valid = len(y_valid)  
@@ -48,17 +49,19 @@ Below are distribution histograms for training, validation and test sets respect
 
 ![hist_orig]
 
-All, training, validation, and test sets have relatively same signs distribution. It must be noted that sets are biased toward certain signs. 
+All, training, validation, and test sets have relatively similar signs distribution. It must be noted that sets are biased toward certain signs. 
 
 * Most frequent sign in training set - *'Speed limit (50km/h)'* with 2010 samples
 * Least frequent sign in training set - *'Speed limit (20km/h)'* with 180 samples
 
-Ratio of the most frequent sign to the least one is over 10! On the one hand, it's not an ideal situation as a model based on such dataset will be **biased (i.e. perform better) towards over-represented signs**. On the other hand, based on the mere size of the datasets, one may conclude that **these distributions somewhat represent real distributions of the signs on the roads**! In fact, in five years I have never encountered *'Speed limit (20km/h)'* sign in Germany. Whereas 30 and 50 km/h signs are common due to 'residential' and 'urban' speed limits regulations. Some people argue that datasets must be equalized in order to avoid biasing, and others going for integrity of the distribution solely for achieving higher accuracy. IMO, the golden line is somewhere in between. 
+Ratio of the most frequent sign to the least one is over 10! On the one hand, it's not an ideal situation as a model based on such dataset will be **biased (i.e. perform better) towards over-represented signs**. On the other hand, one may conclude that **these distributions represent real distributions of the signs on the roads**! In fact, in five years I have never encountered *'Speed limit (20km/h)'* sign in Germany. Whereas 30 and 50 km/h signs are common due to 'residential' and 'urban' speed limits regulations. Some people argue that datasets must be equalized in order to avoid biasing, and others going for integrity of the distribution solely for achieving higher accuracy. IMO, the golden line is somewhere in between. 
 
 Let's have a look at the random samples for each sign class:
+
 ![signs0-15]
 ![signs16-31]
 ![signs32-42]
+
 as can be observed, datasets comprise of images of wide range of quality. Some signs are hardly readable as they are either too dark, too bright and/or too blur. Also, in some samples signs are partially visually obstructed, covered with shadows, or contain parts of other signs.  
 
 ### Design and Test a Model Architecture
@@ -66,8 +69,12 @@ as can be observed, datasets comprise of images of wide range of quality. Some s
 We can further increase dataset by applying simple geometrical transformations. 
 ##### a. Symmetries: 
 Certain signs are horizontally, vertically, diagonally (*-pi/4* and *pi/4*) and/or rotationally (*pi/2*, *pi*, *3pi/2*) symmetrical. For example, all aforementioned transformations can be applied to *'Priority road'* sign, while *'Bumpy road'* only horizontally symmetrical.
-![class12_sym]
-Certain sign pairs (typ. *'left-right'* type of signs) are horizontal mirrored copies. So by applying the transformation sample set of respective counterpart sign can be extended.
+
+![sign12_sym]
+
+Certain sign pairs (typ. *'left-right'* type of signs) are horizontal mirrored copies. So by applying the horizontal flipping sample set of the counterpart sign can be extended.
+
+![sign38-39_sym]
 
 After applying symmetry extension of the training dataset, histograms look as follows
 ##### b. Perspective transformation:    
